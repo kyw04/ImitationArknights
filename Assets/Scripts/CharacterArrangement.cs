@@ -76,4 +76,9 @@ public class CharacterArrangement : MonoBehaviour
         y = character.y;
         target = Instantiate(character.gameObject);
     }
+
+    public void CancellButtonClick()
+    {
+
+    }
 }
