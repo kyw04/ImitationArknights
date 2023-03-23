@@ -31,6 +31,7 @@ public class CharacterArrangement : MonoBehaviour
                 if (arrangement)
                 {
                     target.transform.parent = floor;
+                    character.UI.SetActive(true);
                     button.SetActive(false);
                 }
                 else
@@ -75,10 +76,8 @@ public class CharacterArrangement : MonoBehaviour
         character = button.GetComponent<CharacterButton>().Prefab.GetComponent<Character>();
         y = character.y;
         target = Instantiate(character.gameObject);
-    }
-
-    public void CancellButtonClick()
-    {
-
+        character = target.GetComponent<Character>();
+        character.UI.SetActive(false);
+        character.button = button;
     }
 }
