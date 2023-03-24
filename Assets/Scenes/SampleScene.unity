@@ -4028,7 +4028,7 @@ GameObject:
   - component: {fileID: 1801009618}
   - component: {fileID: 1801009617}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4082,7 +4082,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cac215b35b659404aafe9204140a9292, type: 2}
+  - {fileID: 2100000, guid: 98246edc0b5fb0d498dcf2f293c528a7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

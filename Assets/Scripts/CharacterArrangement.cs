@@ -10,7 +10,8 @@ public class CharacterArrangement : MonoBehaviour
     private GameObject button;
     private Transform floor;
     private Character character;
-    private bool selected;
+
+    public bool selected;
     private bool arrangement;
     private float y;
 
@@ -31,7 +32,7 @@ public class CharacterArrangement : MonoBehaviour
                 if (arrangement)
                 {
                     target.transform.parent = floor;
-                    character.UI.SetActive(true);
+                    character.joystick.SetActive(true);
                     button.SetActive(false);
                 }
                 else
@@ -77,7 +78,7 @@ public class CharacterArrangement : MonoBehaviour
         y = character.y;
         target = Instantiate(character.gameObject);
         character = target.GetComponent<Character>();
-        character.UI.SetActive(false);
+        character.joystick.SetActive(false);
         character.button = button;
     }
 }
