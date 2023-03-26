@@ -1,12 +1,82 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Joystick : MonoBehaviour
+public class Joystick : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public GameObject joystick;
-    [Range(1, 10)]
+    [SerializeField]
+    private GameObject joystick;
+    [SerializeField]
+    private GameObject direction;
+    [SerializeField]
+    private RectTransform handle;
+    private Vector3 startPos;
+
+    [SerializeField]
+    private GameObject cancell;
+
+    [Range(0, 5)]
     public float handleRange;
+    public float minTravel = 1f;
+    private bool dirSet = false;
 
+    public RectTransform[] pos; // top, left, down, right
 
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        startPos = Input.mousePosition;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        Vector3 currentPos = Input.mousePosition;
+        Vector3 inputDir = (currentPos - startPos) * 0.025f;
+        //float x = inputDir.x;
+        //float y = inputDir.y;
+        //float theta = 90f;
+        //inputDir = new Vector3(x * Mathf.Cos(theta) - y * Mathf.Sin(theta), x * Mathf.Sin(theta) + y * Mathf.Cos(theta)) * 0.01f;
+        Vector3 clampedDir = inputDir.magnitude < handleRange ? inputDir : inputDir.normalized * handleRange;
+
+        if (Mathf.Abs(clampedDir.x) >= minTravel || Mathf.Abs(clampedDir.y) >= minTravel)
+        {
+            cancell.SetActive(false);
+
+            int index = 0;
+            float min = 100f;
+
+            for (int i = 0; i < pos.Length; i++)
+            {
+                Vector3 minusPos = handle.anchoredPosition - pos[i].anchoredPosition;
+                float dis = Mathf.Sqrt(minusPos.x * minusPos.x + minusPos.y * minusPos.y);
+
+                if (min > dis)
+                {
+                    index = i;
+                    min = dis;
+                }
+            }
+
+            direction.transform.rotation = Quaternion.Euler(90f, 0, index * 90f);
+            dirSet = true;
+        }
+        else
+        {
+            cancell.SetActive(true);
+            dirSet = false;
+        }
+
+        handle.localPosition = clampedDir;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        handle.anchoredPosition = Vector2.zero;
+        cancell.SetActive(true);
+
+        if (dirSet)
+        {
+            joystick.SetActive(false);
+        }
+    }
 }

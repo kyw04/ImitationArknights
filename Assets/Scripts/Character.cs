@@ -7,6 +7,7 @@ public class Character : MonoBehaviour
     public enum Type { Top, Bottom };
     public Type type;
     public GameObject attackRange;
+    public GameObject canvas;
     public int damage;
     public int defense;
     public int magicDefense;
@@ -23,22 +24,11 @@ public class Character : MonoBehaviour
             y = 1.5f;
         else
             y = 1.25f;
-
-        joystickRect = joystick.GetComponent<RectTransform>();
-        handleRect = handle.GetComponent<RectTransform>();
     }
 
     public void CancellButtonClick()
     {
         button.SetActive(true);
         Destroy(this.gameObject);
-    }
-
-    public void DirectionSetting()
-    {
-        Vector3 dir = handleRect.anchoredPosition - joystickRect.anchoredPosition;
-        Vector3 clampedDir = dir.magnitude < handleRange ? dir : dir.normalized * handleRange;
-
-        handleRect.anchoredPosition = clampedDir;
     }
 }

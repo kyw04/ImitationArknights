@@ -7,9 +7,10 @@ public class CharacterArrangement : MonoBehaviour
 {
     [HideInInspector]
     public GameObject target;
-    private GameObject button;
+    private GameObject targetCanvas;
+    private GameObject targetButton;
+    private Character targetCharacter;
     private Transform floor;
-    private Character character;
 
     public bool selected;
     private bool arrangement;
@@ -32,8 +33,8 @@ public class CharacterArrangement : MonoBehaviour
                 if (arrangement)
                 {
                     target.transform.parent = floor;
-                    character.joystick.SetActive(true);
-                    button.SetActive(false);
+                    targetCanvas.SetActive(true);
+                    targetButton.SetActive(false);
                 }
                 else
                 {
@@ -50,8 +51,8 @@ public class CharacterArrangement : MonoBehaviour
                     Debug.DrawRay(ray.origin, ray.direction, Color.red);
 
                     floor = hit.collider.transform;
-                    if ((hit.collider.CompareTag("FirstFloor") && character.type == Character.Type.Bottom
-                            || hit.collider.CompareTag("SecondFloor") && character.type == Character.Type.Top) && floor.childCount == 0)
+                    if ((hit.collider.CompareTag("FirstFloor") && targetCharacter.type == Character.Type.Bottom
+                            || hit.collider.CompareTag("SecondFloor") && targetCharacter.type == Character.Type.Top) && floor.childCount == 0)
                     {
                         Vector3 pos = hit.collider.transform.position;
                         target.transform.position = new Vector3(pos.x, y + 1, pos.z);
@@ -73,12 +74,13 @@ public class CharacterArrangement : MonoBehaviour
             return;
 
         selected = true;
-        button = EventSystem.current.currentSelectedGameObject;
-        character = button.GetComponent<CharacterButton>().Prefab.GetComponent<Character>();
-        y = character.y;
-        target = Instantiate(character.gameObject);
-        character = target.GetComponent<Character>();
-        character.joystick.SetActive(false);
-        character.button = button;
+        targetButton = EventSystem.current.currentSelectedGameObject;
+        targetCharacter = targetButton.GetComponent<CharacterButton>().Prefab.GetComponent<Character>();
+        y = targetCharacter.y;
+        target = Instantiate(targetCharacter.gameObject);
+        targetCharacter = target.GetComponent<Character>();
+        targetCanvas = targetCharacter.canvas;
+        targetCanvas.SetActive(false);
+        targetCharacter.button = targetButton;
     }
 }
