@@ -15,11 +15,13 @@ public class CharacterArrangement : MonoBehaviour
     public bool selected;
     private bool arrangement;
     private float y;
+    private int layerMask;
 
     private void Start()
     {
         selected = false;
         arrangement = false;
+        layerMask = ~LayerMask.GetMask("Player");
     }
 
     private void Update()
@@ -35,6 +37,7 @@ public class CharacterArrangement : MonoBehaviour
                     target.transform.parent = floor;
                     targetCanvas.SetActive(true);
                     targetButton.SetActive(false);
+                    GameManager.instance.panel.SetActive(true);
                 }
                 else
                 {
@@ -46,7 +49,7 @@ public class CharacterArrangement : MonoBehaviour
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
 
-                if (Physics.Raycast(ray, out hit))
+                if (Physics.Raycast(ray, out hit, 20f, layerMask))
                 {
                     Debug.DrawRay(ray.origin, ray.direction, Color.red);
 
@@ -75,10 +78,10 @@ public class CharacterArrangement : MonoBehaviour
 
         selected = true;
         targetButton = EventSystem.current.currentSelectedGameObject;
-        targetCharacter = targetButton.GetComponent<CharacterButton>().Prefab.GetComponent<Character>();
+        targetCharacter = targetButton.GetComponent<CharacterButton>().Prefab.GetComponentInChildren<Character>();
         y = targetCharacter.y;
-        target = Instantiate(targetCharacter.gameObject);
-        targetCharacter = target.GetComponent<Character>();
+        target = Instantiate(targetButton.GetComponent<CharacterButton>().Prefab);
+        targetCharacter = target.GetComponentInChildren<Character>();
         targetCanvas = targetCharacter.canvas;
         targetCanvas.SetActive(false);
         targetCharacter.button = targetButton;

@@ -22,6 +22,14 @@ public class Joystick : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private bool dirSet = false;
 
     public RectTransform[] pos; // top, left, down, right
+    private Character character;
+    private Transform attackRange;
+
+    private void Start()
+    {
+        character = GetComponentInParent<Character>();
+        attackRange = character.attackRange.transform;
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -41,6 +49,7 @@ public class Joystick : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         if (Mathf.Abs(clampedDir.x) >= minTravel || Mathf.Abs(clampedDir.y) >= minTravel)
         {
             cancell.SetActive(false);
+            attackRange.gameObject.SetActive(true);
 
             int index = 0;
             float min = 100f;
@@ -58,11 +67,14 @@ public class Joystick : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             }
 
             direction.transform.rotation = Quaternion.Euler(90f, 0, index * 90f);
+            attackRange.transform.rotation = Quaternion.Euler(0, index * -90f, 0);
             dirSet = true;
         }
         else
         {
             cancell.SetActive(true);
+            attackRange.gameObject.SetActive(false);
+
             dirSet = false;
         }
 
@@ -76,7 +88,13 @@ public class Joystick : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         if (dirSet)
         {
+            GameManager.instance.panel.SetActive(false);
             joystick.SetActive(false);
+            character.box.enabled = true;
+            for (int i = 0; i < attackRange.childCount; i++)
+            {
+                attackRange.GetChild(i).GetComponent<MeshRenderer>().enabled = false;
+            }
         }
     }
 }

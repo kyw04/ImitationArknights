@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Character : MonoBehaviour
 {
@@ -8,11 +9,19 @@ public class Character : MonoBehaviour
     public Type type;
     public GameObject attackRange;
     public GameObject canvas;
-    public int damage;
-    public int defense;
+    public Image hpImage;
+    public float hp;
+    private float currentHp;
+    public float damage;
+    public float attackSpeed;
     public int magicDefense;
-    public int block;
+    public int defense;
 
+    private int defenseCount;
+    private List<GameObject> defenseObj = new List<GameObject>();
+
+    [HideInInspector]
+    public BoxCollider box;
     [HideInInspector]
     public GameObject button;
     [HideInInspector]
@@ -24,11 +33,79 @@ public class Character : MonoBehaviour
             y = 1.5f;
         else
             y = 1.25f;
+
+        attackRange.SetActive(false);
+        defenseCount = 0;
+        box = GetComponent<BoxCollider>();
+        box.enabled = false;
+        currentHp = hp;
+    }
+
+    private void Update()
+    { 
+        for (int i = 0; i < defenseObj.Count; i++)
+        {
+            if (defenseObj[i] == null)
+            {
+                defenseObj.RemoveAt(i);
+                defenseCount++;
+            }
+        }
+
+        SetHP();
     }
 
     public void CancellButtonClick()
     {
+        GameManager.instance.panel.SetActive(false);
         button.SetActive(true);
-        Destroy(this.gameObject);
+        Destroy(this.transform.parent.gameObject);
+    }
+
+    private void Die()
+    {
+        box.enabled = false;
+        for (int i = 0; i < defenseObj.Count; i++)
+        {
+            if (defenseObj[i].GetComponent<Enemy>() != null)
+            {
+                Enemy defenceEnemy = defenseObj[i].GetComponent<Enemy>();
+                defenceEnemy.Running(true);
+            }
+        }
+
+        button.SetActive(true);
+        Destroy(this.transform.parent.gameObject);
+    }
+
+    public void SetHP()
+    {
+        hpImage.gameObject.SetActive(true);
+        hpImage.fillAmount = currentHp / hp;
+    }
+
+    public void OnDamage(float damage)
+    {
+        currentHp -= damage;
+
+        if (currentHp <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy") && defenseCount < defense)
+        {
+            Enemy enemy = other.GetComponent<Enemy>();
+            if (enemy.isRunning == true)
+            {
+                enemy.isRunning = false;
+                defenseCount++;
+                defenseObj.Add(enemy.gameObject);
+                Debug.Log(defenseCount);
+            }
+        }
     }
 }
