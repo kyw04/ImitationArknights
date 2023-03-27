@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
     public float attackSpeed;
     public float speed;
 
+    private Character defenseCharacter;
     private Transform target;
     private NavMeshAgent agent;
     private Vector3 destination;
@@ -71,13 +72,18 @@ public class Enemy : MonoBehaviour
         SetHP();
     }
 
-    public void Running(bool bol)
+    public void Running(bool bol, Character defense)
     {
         enemy.enabled = bol;
         isRunning = bol;
+        defenseCharacter = defense;
 
-        destination = target.position;
-        agent.destination = destination;
+        if (bol)
+        {
+            defenseCharacter = null;
+            destination = target.position;
+            agent.destination = destination;
+        }
     }
 
     public void SetHP()
@@ -96,6 +102,10 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        if (defenseCharacter != null)
+        {
+            defenseCharacter.defenseCount--;
+        }
         GameManager.instance.currentEnemyCount++;
         Destroy(this.gameObject);
     }

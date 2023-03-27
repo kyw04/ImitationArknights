@@ -17,7 +17,8 @@ public class Character : MonoBehaviour
     public int magicDefense;
     public int defense;
 
-    private int defenseCount;
+    [HideInInspector]
+    public int defenseCount;
     private List<GameObject> defenseObj = new List<GameObject>();
 
     [HideInInspector]
@@ -42,16 +43,7 @@ public class Character : MonoBehaviour
     }
 
     private void Update()
-    { 
-        for (int i = 0; i < defenseObj.Count; i++)
-        {
-            if (defenseObj[i] == null)
-            {
-                defenseObj.RemoveAt(i);
-                defenseCount++;
-            }
-        }
-
+    {
         SetHP();
     }
 
@@ -67,10 +59,10 @@ public class Character : MonoBehaviour
         box.enabled = false;
         for (int i = 0; i < defenseObj.Count; i++)
         {
-            if (defenseObj[i].GetComponent<Enemy>() != null)
+            if (defenseObj[i] != null && defenseObj[i].GetComponent<Enemy>() != null)
             {
                 Enemy defenceEnemy = defenseObj[i].GetComponent<Enemy>();
-                defenceEnemy.Running(true);
+                defenceEnemy.Running(true, this);
             }
         }
 
@@ -101,10 +93,10 @@ public class Character : MonoBehaviour
             Enemy enemy = other.GetComponent<Enemy>();
             if (enemy.isRunning == true)
             {
-                enemy.isRunning = false;
+                enemy.Running(false, this);
                 defenseCount++;
                 defenseObj.Add(enemy.gameObject);
-                Debug.Log(defenseCount);
+                //Debug.Log(defenseCount);
             }
         }
     }

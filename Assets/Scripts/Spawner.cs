@@ -26,13 +26,13 @@ public class Spawner : MonoBehaviour
     {
         spawn.Add(new Spawn(0, 1.5f));
         spawn.Add(new Spawn(0, 0.5f));
-        spawn.Add(new Spawn(0, 5.5f));
+        spawn.Add(new Spawn(0, 10.5f));
         spawn.Add(new Spawn(0, 0.5f));
         spawn.Add(new Spawn(0, 0.5f));
-        spawn.Add(new Spawn(0, 5.5f));
+        spawn.Add(new Spawn(0, 10.5f));
         spawn.Add(new Spawn(0, 0.5f));
         spawn.Add(new Spawn(0, 0.5f));
-        spawn.Add(new Spawn(0, 5f));
+        spawn.Add(new Spawn(0, 10f));
         spawn.Add(new Spawn(0, 0.5f));
 
         GameManager.instance.enemyCount = spawn.Count;

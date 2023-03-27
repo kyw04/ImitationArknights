@@ -93,6 +93,7 @@ public class Joystick : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             character.box.enabled = true;
             for (int i = 0; i < attackRange.childCount; i++)
             {
+                attackRange.GetChild(i).GetComponent<BoxCollider>().enabled = true;
                 attackRange.GetChild(i).GetComponent<MeshRenderer>().enabled = false;
             }
         }
