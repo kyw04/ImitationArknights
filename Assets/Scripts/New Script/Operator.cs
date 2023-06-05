@@ -21,37 +21,47 @@ public struct Stats
     public float lastAttackTime;
 }
 
-public enum Type
-{
-    None,
-    Top,
-    Down
-}
-
-public enum Job
-{
-    None,
-    // 근거리
-    Vanguard,
-    Guard,
-    Defender,
-    Specialist,
-    // 원거리
-    Sniper,
-    Caster,
-    Medic,
-    Supporter
-}
-
 public class Operator : MonoBehaviour
 {
+    public enum Type
+    {
+        None,
+        Top,
+        Down
+    }
+
+    public enum Job
+    {
+        None,
+        // 근거리
+        Vanguard,
+        Guard,
+        Defender,
+        Specialist,
+        // 원거리
+        Sniper,
+        Caster,
+        Medic,
+        Supporter
+    }
+
+    public GameObject attackRange;
     public Transform[] attackRangeTransforms;
     public string operatorName;
     public Type type;
     public Job job;
     public Stats stats;
-
+    
+    [HideInInspector]
+    public GameObject button;
+    [HideInInspector]
+    public BoxCollider box;
     private List<Enemy> stopEnemy = new List<Enemy>();
+
+    private void Start()
+    {
+        box = GetComponent<BoxCollider>();
+    }
 
     protected virtual void Update()
     {
@@ -67,8 +77,11 @@ public class Operator : MonoBehaviour
         if (other.CompareTag("Enemy") && stats.stopCount > stopEnemy.Count)
         {
             Enemy enemy = other.GetComponent<Enemy>();
-            stopEnemy.Add(enemy);
-            enemy.Stop();
+            if (enemy.isRunning == true)
+            {
+                stopEnemy.Add(enemy);
+                enemy.Stop();
+            }
         }
     }
 

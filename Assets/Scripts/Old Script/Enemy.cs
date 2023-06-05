@@ -74,6 +74,7 @@ public class Enemy : MonoBehaviour
 
     public void Stop()
     {
+        enemy.enabled = false;
         isRunning = false;
     }
     public void Run()

@@ -22,12 +22,12 @@ public class Joystick : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private bool dirSet = false;
 
     public RectTransform[] pos; // top, left, down, right
-    private Character character;
+    private Operator character;
     private Transform attackRange;
 
     private void Start()
     {
-        character = GetComponentInParent<Character>();
+        character = GetComponentInParent<Operator>();
         attackRange = character.attackRange.transform;
     }
 
@@ -93,7 +93,7 @@ public class Joystick : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             character.box.enabled = true;
             for (int i = 0; i < attackRange.childCount; i++)
             {
-                attackRange.GetChild(i).GetComponent<BoxCollider>().enabled = true;
+                //attackRange.GetChild(i).GetComponent<BoxCollider>().enabled = true;
                 attackRange.GetChild(i).GetComponent<MeshRenderer>().enabled = false;
             }
         }
