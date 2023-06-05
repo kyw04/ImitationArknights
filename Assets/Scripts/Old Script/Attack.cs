@@ -17,7 +17,7 @@ public class Attack : MonoBehaviour
     {
         if (attackDelay <= Time.time)
         {
-            Debug.Log("attack");
+            //Debug.Log("attack");
             if (character != null && other.CompareTag("Enemy"))
             {
                 GameObject[] GameObj = GameObject.FindGameObjectsWithTag("Enemy");

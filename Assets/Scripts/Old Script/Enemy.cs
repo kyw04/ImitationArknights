@@ -72,6 +72,17 @@ public class Enemy : MonoBehaviour
         SetHP();
     }
 
+    public void Stop()
+    {
+        isRunning = false;
+    }
+    public void Run()
+    {
+        destination = target.position;
+        agent.destination = destination;
+        isRunning = true;
+    }
+
     public void Running(bool bol, Character defense)
     {
         enemy.enabled = bol;
